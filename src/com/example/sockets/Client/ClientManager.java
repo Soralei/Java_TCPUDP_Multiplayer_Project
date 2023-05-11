@@ -1,40 +1,95 @@
 package com.example.sockets.Client;
 
+import com.example.sockets.Shared.DataActionMapping;
+
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.DatagramSocket;
 import java.net.Socket;
 
 public class ClientManager {
-    private final Socket socket;
+    private final Socket tcpSocket;
+    private final DatagramSocket udpSocket;
     private final ObjectInputStream objectInputStream;
+    private final DataOutputStream dataOutputStream;
     private final LocalData localData;
-    private final ClientInputManager clientInputManager;
+    private final int tcpRemotePort;
+    private final int udpRemotePort;
+    private final int udpLocalPort;
 
-    public ClientManager(String ipAddress, int port) {
+    public ClientManager(String ipAddress, int tcpRemotePort, int udpRemotePort) {
+        this.tcpRemotePort = tcpRemotePort;
+        this.udpRemotePort = udpRemotePort;
         try {
-            this.socket = new Socket(ipAddress, port);
-            this.objectInputStream = new ObjectInputStream(this.socket.getInputStream());
+            // Sets up TCP socket by attempting to connect to the server.
+            this.tcpSocket = new Socket(ipAddress, tcpRemotePort);
+            // Sets up UDP socket by trying to bind to any available port.
+            this.udpSocket = new DatagramSocket();
+            // Set up input and output streams for communication back and forth.
+            this.objectInputStream = new ObjectInputStream(this.tcpSocket.getInputStream());
+            this.dataOutputStream = new DataOutputStream(this.tcpSocket.getOutputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // Store the UDP port.
+        this.udpLocalPort = this.udpSocket.getLocalPort();
+
+        // Set up local data which holds the entities the client knows about.
+        // Relies on the server to communicate this information.
         this.localData = new LocalData();
-        this.clientInputManager = new ClientInputManager(this);
-        this.clientInputManager.start();
+
+        // Set up the TCP and UDP receiver threads.
+        // Allows us to receive TCP and UDP data from the server.
+        new ClientTCPReceiver(this).start();
+        new ClientUDPReceiver(this).start();
+
+        // Send the local UDP port to the server so that it can communicate back.
+        try {
+            dataOutputStream.writeInt(DataActionMapping.UDP_REGISTER_PORT);
+            dataOutputStream.writeInt(this.udpLocalPort);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public Socket getSocket() {
-        return socket;
+    // Gracefully shuts down the client by closing TCP and UDP ports.
+    public void shutdown() {
+        try { tcpSocket.close(); } catch (IOException e) { e.printStackTrace(); }
+        udpSocket.close();
+    }
+
+    public Socket getTcpSocket() {
+        return tcpSocket;
     }
 
     public ObjectInputStream getObjectInputStream() {
         return objectInputStream;
     }
 
+    public DataOutputStream getDataOutputStream() {
+        return dataOutputStream;
+    }
+
     public LocalData getLocalData() {
         return localData;
     }
 
-    public ClientInputManager getClientInputManager() {
-        return clientInputManager;
+    public DatagramSocket getUdpSocket() {
+        return udpSocket;
+    }
+
+    public int getTcpRemotePort() {
+        return tcpRemotePort;
+    }
+
+    public int getUdpRemotePort() {
+        return udpRemotePort;
+    }
+
+    public int getUdpLocalPort() {
+        return udpLocalPort;
     }
 }

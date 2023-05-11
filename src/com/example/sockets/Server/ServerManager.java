@@ -3,21 +3,25 @@ package com.example.sockets.Server;
 import com.example.sockets.Shared.DataActionMapping;
 import com.example.sockets.Shared.WorldPosition;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerManager {
-    private final ServerSocket socket;
+    private final ServerSocket tcpSocket;
+    private final DatagramSocket udpSocket;
     private final Map<Integer, ServerClientData> serverClientData;
     private final Map<Integer, NetworkedEntity> networkedEntities;
+    private final int tcpPort;
+    private final int udpPort;
 
-    public ServerManager(int port) {
+    public ServerManager(int tcpPort, int udpPort) {
+        this.tcpPort = tcpPort;
+        this.udpPort = udpPort;
         try {
-            this.socket = new ServerSocket(port);
+            this.tcpSocket = new ServerSocket(tcpPort);
+            this.udpSocket = new DatagramSocket(udpPort);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +31,13 @@ public class ServerManager {
         serverConnectionManager.start();
     }
 
-    // Notifies a client of that an entity has been registered on the server
+    // Gracefully shuts down the server by closing the TCP and UDP ports.
+    public void shutdown() {
+        try { tcpSocket.close(); } catch (IOException e) { throw new RuntimeException(e); }
+        udpSocket.close();
+    }
+
+    // Notifies a client of that an entity has been registered on the server.
     private void sendClientEntity(NetworkedEntity networkedEntity, ServerClientData serverClientData) {
         ObjectOutputStream output = serverClientData.getObjectOutputStream();
         try {
@@ -52,20 +62,27 @@ public class ServerManager {
         sendClientEntity(networkedEntity, serverClientData);
     }
 
-    // Broadcasts the entity's changed position to all connected clients.
+    // Broadcasts the entity's changed position to all connected clients via UDP
     public void networkEntityPositionChange(NetworkedEntity networkedEntity, WorldPosition worldPosition) {
-        serverClientData.forEach((k, v) -> {
-            ObjectOutputStream output = v.getObjectOutputStream();
-            try {
-                output.writeInt(DataActionMapping.ENTITY_POSITION_CHANGE);
-                output.writeInt(networkedEntity.getUniqueEntityId());
-                output.writeInt(worldPosition.x());
-                output.writeInt(worldPosition.y());
-                output.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); DataOutputStream dataInputStream = new DataOutputStream(byteArrayOutputStream)) {
+            getServerClientData().forEach((k, v) -> {
+                v.getSocket().getInetAddress();
+                try {
+                    dataInputStream.writeInt(DataActionMapping.ENTITY_POSITION_CHANGE);
+                    dataInputStream.writeInt(networkedEntity.getUniqueEntityId());
+                    dataInputStream.writeInt(worldPosition.x());
+                    dataInputStream.writeInt(worldPosition.y());
+                    dataInputStream.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                byte[] bytesToSend = byteArrayOutputStream.toByteArray();
+                DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, v.getSocket().getInetAddress(), v.getUdpPort());
+                try { udpSocket.send(packet); } catch (IOException e) { throw new RuntimeException(e); }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Handles new clients and syncs them with the server
@@ -87,8 +104,8 @@ public class ServerManager {
         }
     }
 
-    public ServerSocket getSocket() {
-        return socket;
+    public ServerSocket getTcpSocket() {
+        return tcpSocket;
     }
 
     public Map<Integer, ServerClientData> getServerClientData() {
@@ -97,5 +114,17 @@ public class ServerManager {
 
     public Map<Integer, NetworkedEntity> getNetworkedEntities() {
         return networkedEntities;
+    }
+
+    public DatagramSocket getUdpSocket() {
+        return udpSocket;
+    }
+
+    public int getTcpPort() {
+        return tcpPort;
+    }
+
+    public int getUdpPort() {
+        return udpPort;
     }
 }

@@ -14,9 +14,9 @@ public class ServerConnectionManager extends Thread {
     @Override
     public void run() {
         super.run();
-        while(serverManager.getSocket() != null && !serverManager.getSocket().isClosed()) {
+        while(serverManager.getTcpSocket() != null && !serverManager.getTcpSocket().isClosed()) {
             try {
-                Socket clientSocket = serverManager.getSocket().accept();
+                Socket clientSocket = serverManager.getTcpSocket().accept();
                 synchronized (serverManager.getServerClientData()) {
                     serverManager.handleClientConnects(clientSocket);
                 }

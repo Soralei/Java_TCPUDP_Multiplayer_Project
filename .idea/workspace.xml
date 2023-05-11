@@ -4,20 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Square 1">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientInputManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/LocalData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/NetworkedEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerConnectionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Shared/DataActionMapping.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/com/example/sockets/ConnectClientWithServerTest.java" afterDir="false" />
+    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Synced networked entities">
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientUDPReceiver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientTCPReceiver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/com/example/sockets/UDPTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientInputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientTCPReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerConnectionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerConnectionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Shared/DataActionMapping.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Shared/DataActionMapping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/com/example/sockets/ConnectClientWithServerTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +61,9 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "socket1",
+    "git-widget-placeholder": "udp1",
     "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Dev/Java/working_with_sockets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -94,20 +93,7 @@
       <recent name="com.example.sockets" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ConnectClientWithServerTest">
-    <configuration name="GameClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.sockets.GameClient" />
-      <module name="working_with_sockets" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.sockets.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.UDPTest">
     <configuration name="ConnectClientWithServerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="working_with_sockets" />
       <extension name="coverage">
@@ -170,13 +156,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UDPTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="working_with_sockets" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.sockets.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.sockets" />
+      <option name="MAIN_CLASS_NAME" value="com.example.sockets.UDPTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ConnectClientWithServerTest" />
+        <item itemvalue="JUnit.UDPTest" />
+        <item itemvalue="JUnit.GameClientTest" />
         <item itemvalue="JUnit.ConnectClientWithServerTest.ServerSendClientDataTest" />
         <item itemvalue="JUnit.ConnectClientWithServerTest.ConnectClientWithServer" />
-        <item itemvalue="JUnit.GameClientTest" />
-        <item itemvalue="Application.GameClient" />
+        <item itemvalue="JUnit.ConnectClientWithServerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -197,6 +198,7 @@
       <workItem from="1683724234307" duration="9558000" />
       <workItem from="1683741468075" duration="9205000" />
       <workItem from="1683795359694" duration="16588000" />
+      <workItem from="1683830426157" duration="7715000" />
     </task>
     <task id="LOCAL-00001" summary="Networking basics, functional">
       <created>1683723620009</created>
