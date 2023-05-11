@@ -1,8 +1,6 @@
 package com.example.sockets.Server;
 
-import com.example.sockets.Shared.DataActionMapping;
-
-import java.io.*;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ServerClientData {
