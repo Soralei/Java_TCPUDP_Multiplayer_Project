@@ -1,20 +1,21 @@
 package com.example.sockets.Server;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ServerClientData {
     private static int nextClientId = 0;
     private final int clientId;
-    private final Socket socket;
+    private final Socket tcpSocket;
     private final ObjectOutputStream objectOutputStream;
     private int udpPort;
 
-    public ServerClientData(Socket socket, ObjectOutputStream objectOutputStream) {
+    public ServerClientData(Socket tcpSocket) {
         this.clientId = nextClientId++;
-        this.socket = socket;
-        this.objectOutputStream = objectOutputStream;
+        this.tcpSocket = tcpSocket;
         this.udpPort = -1;
+        try { this.objectOutputStream = new ObjectOutputStream(this.tcpSocket.getOutputStream()); } catch (IOException e) { throw new RuntimeException(e); }
 
         new ServerClientTCPReceiver(this).start();
     }
@@ -23,8 +24,8 @@ public class ServerClientData {
         return clientId;
     }
 
-    public Socket getSocket() {
-        return socket;
+    public Socket getTcpSocket() {
+        return tcpSocket;
     }
 
     public ObjectOutputStream getObjectOutputStream() {

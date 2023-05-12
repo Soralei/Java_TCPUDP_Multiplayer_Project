@@ -23,21 +23,21 @@ public class ClientTCPReceiver extends Thread {
                 if(input.available() > 0) {
                     int dataAction = input.readInt();
 
-                    if(dataAction == DataActionMapping.ENTITY_POSITION_CHANGE) {
+                    if(dataAction == DataActionMapping.ENTITY_POSITION_CHANGE.ordinal()) {
                         int uniqueId = input.readInt();
                         int posX = input.readInt();
                         int posY = input.readInt();
                         clientManager.getLocalData().updateClientEntityPosition(uniqueId, new WorldPosition(posX, posY));
                     }
 
-                    if(dataAction == DataActionMapping.ENTITY_ADDED) {
+                    if(dataAction == DataActionMapping.ENTITY_ADDED.ordinal()) {
                         int uniqueId = input.readInt();
                         int posX = input.readInt();
                         int posY = input.readInt();
                         clientManager.getLocalData().addClientEntity(uniqueId, new WorldPosition(posX, posY));
                     }
 
-                    if(dataAction == DataActionMapping.ENTITY_REMOVED) {
+                    if(dataAction == DataActionMapping.ENTITY_REMOVED.ordinal()) {
                         int uniqueId = input.readInt();
                         clientManager.getLocalData().removeClientEntity(uniqueId);
                     }

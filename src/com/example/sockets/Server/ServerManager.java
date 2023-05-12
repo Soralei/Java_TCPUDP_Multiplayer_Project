@@ -29,6 +29,8 @@ public class ServerManager {
         this.networkedEntities = new HashMap<>();
         ServerConnectionManager serverConnectionManager = new ServerConnectionManager(this);
         serverConnectionManager.start();
+        ServerUDPReceiver serverUDPReceiver = new ServerUDPReceiver(this);
+        serverUDPReceiver.start();
     }
 
     // Gracefully shuts down the server by closing the TCP and UDP ports.
@@ -41,7 +43,7 @@ public class ServerManager {
     private void sendClientEntity(NetworkedEntity networkedEntity, ServerClientData serverClientData) {
         ObjectOutputStream output = serverClientData.getObjectOutputStream();
         try {
-            output.writeInt(DataActionMapping.ENTITY_ADDED);
+            output.writeInt(DataActionMapping.ENTITY_ADDED.ordinal());
             output.writeInt(networkedEntity.getUniqueEntityId());
             output.writeInt(networkedEntity.getWorldPosition().x());
             output.writeInt(networkedEntity.getWorldPosition().y());
@@ -66,9 +68,9 @@ public class ServerManager {
     public void networkEntityPositionChange(NetworkedEntity networkedEntity, WorldPosition worldPosition) {
         try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); DataOutputStream dataInputStream = new DataOutputStream(byteArrayOutputStream)) {
             getServerClientData().forEach((k, v) -> {
-                v.getSocket().getInetAddress();
+                v.getTcpSocket().getInetAddress();
                 try {
-                    dataInputStream.writeInt(DataActionMapping.ENTITY_POSITION_CHANGE);
+                    dataInputStream.writeInt(DataActionMapping.ENTITY_POSITION_CHANGE.ordinal());
                     dataInputStream.writeInt(networkedEntity.getUniqueEntityId());
                     dataInputStream.writeInt(worldPosition.x());
                     dataInputStream.writeInt(worldPosition.y());
@@ -77,7 +79,7 @@ public class ServerManager {
                     throw new RuntimeException(e);
                 }
                 byte[] bytesToSend = byteArrayOutputStream.toByteArray();
-                DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, v.getSocket().getInetAddress(), v.getUdpPort());
+                DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, v.getTcpSocket().getInetAddress(), v.getUdpPort());
                 try { udpSocket.send(packet); } catch (IOException e) { throw new RuntimeException(e); }
             });
         } catch (IOException e) {
@@ -87,21 +89,17 @@ public class ServerManager {
 
     // Handles new clients and syncs them with the server
     public void handleClientConnects(Socket clientSocket) {
-        try {
-            // Create the client on the server
-            ServerClientData newClient = new ServerClientData(clientSocket, new ObjectOutputStream(clientSocket.getOutputStream()));
+        // Create the client on the server
+        ServerClientData newClient = new ServerClientData(clientSocket);
 
-            // Add the client to the server
-            serverClientData.put(newClient.getClientId(), newClient);
+        // Add the client to the server
+        serverClientData.put(newClient.getClientId(), newClient);
 
-            // Update the client with current entities
-            networkedEntities.forEach((k, v) -> networkEntityRegister(v, newClient));
+        // Update the client with current entities
+        networkedEntities.forEach((k, v) -> networkEntityRegister(v, newClient));
 
-            // Add a player entity to represent the client
-            new ServerPlayer(this, "Player ID#" + NetworkedEntity.getNextUniqueId() + 1, new WorldPosition(50, 50));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Add a player entity to represent the client
+        new ServerPlayer(this, "Player ID#" + NetworkedEntity.getNextUniqueId() + 1, new WorldPosition((int)(Math.random() * (50 + 100)), (int)(Math.random() * (50 + 100))));
     }
 
     public ServerSocket getTcpSocket() {

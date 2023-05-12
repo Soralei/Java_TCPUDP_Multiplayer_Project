@@ -14,16 +14,18 @@ public class ClientManager {
     private final ObjectInputStream objectInputStream;
     private final DataOutputStream dataOutputStream;
     private final LocalData localData;
+    private final String remoteIpAddress;
     private final int tcpRemotePort;
     private final int udpRemotePort;
     private final int udpLocalPort;
 
-    public ClientManager(String ipAddress, int tcpRemotePort, int udpRemotePort) {
+    public ClientManager(String remoteIpAddress, int tcpRemotePort, int udpRemotePort) {
         this.tcpRemotePort = tcpRemotePort;
         this.udpRemotePort = udpRemotePort;
+        this.remoteIpAddress = remoteIpAddress;
         try {
             // Sets up TCP socket by attempting to connect to the server.
-            this.tcpSocket = new Socket(ipAddress, tcpRemotePort);
+            this.tcpSocket = new Socket(remoteIpAddress, tcpRemotePort);
             // Sets up UDP socket by trying to bind to any available port.
             this.udpSocket = new DatagramSocket();
             // Set up input and output streams for communication back and forth.
@@ -47,7 +49,7 @@ public class ClientManager {
 
         // Send the local UDP port to the server so that it can communicate back.
         try {
-            dataOutputStream.writeInt(DataActionMapping.UDP_REGISTER_PORT);
+            dataOutputStream.writeInt(DataActionMapping.UDP_REGISTER_PORT.ordinal());
             dataOutputStream.writeInt(this.udpLocalPort);
             dataOutputStream.flush();
         } catch (IOException e) {
@@ -91,5 +93,9 @@ public class ClientManager {
 
     public int getUdpLocalPort() {
         return udpLocalPort;
+    }
+
+    public String getRemoteIpAddress() {
+        return remoteIpAddress;
     }
 }

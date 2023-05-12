@@ -15,11 +15,11 @@ public class ServerClientTCPReceiver extends Thread {
     @Override
     public void run() {
         super.run();
-        try(DataInputStream dataInputStream = new DataInputStream(serverClientData.getSocket().getInputStream())) {
-            while(serverClientData.getSocket().isConnected()) {
+        try(DataInputStream dataInputStream = new DataInputStream(serverClientData.getTcpSocket().getInputStream())) {
+            while(serverClientData.getTcpSocket().isConnected()) {
                 if(dataInputStream.available() > 0) {
                     int dataAction = dataInputStream.readInt();
-                    if(dataAction == DataActionMapping.UDP_REGISTER_PORT) {
+                    if(dataAction == DataActionMapping.UDP_REGISTER_PORT.ordinal()) {
                         serverClientData.setUdpPort(dataInputStream.readInt());
                     }
                 }
