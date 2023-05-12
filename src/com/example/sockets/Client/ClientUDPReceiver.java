@@ -5,6 +5,7 @@ import com.example.sockets.Shared.WorldPosition;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.nio.ByteBuffer;
 
 public class ClientUDPReceiver extends Thread {
     private final ClientManager clientManager;
@@ -27,19 +28,13 @@ public class ClientUDPReceiver extends Thread {
                 }
             }
 
-            System.out.println("Checking bytes");
-            for (byte b : packetBuffer) {
-                System.out.println(b);
-            }
-            System.out.println("Done checking bytes");
+            ByteBuffer buffer = ByteBuffer.wrap(packetBuffer);
 
-            int nextByte = 0;
-            int dataAction = packetBuffer[nextByte++];
+            int dataAction = buffer.getInt();
             if(dataAction == DataActionMapping.ENTITY_POSITION_CHANGE.ordinal()) {
-                int entityId = packetBuffer[nextByte++];
-                int entityPosX = packetBuffer[nextByte++];
-                int entityPosY = packetBuffer[nextByte++];
-                System.out.println("entityId " + entityId + " entityPosX " + entityPosX + " entityPosY" + entityPosY);
+                int entityId = buffer.getInt();
+                int entityPosX = buffer.getInt();
+                int entityPosY = buffer.getInt();
                 clientManager.getLocalData().updateClientEntityPosition(entityId, new WorldPosition(entityPosX, entityPosY));
             }
         }

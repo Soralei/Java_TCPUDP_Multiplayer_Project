@@ -59,7 +59,22 @@ public class ClientManager {
 
     // Gracefully shuts down the client by closing TCP and UDP ports.
     public void shutdown() {
-        try { tcpSocket.close(); } catch (IOException e) { e.printStackTrace(); }
+        try {
+            // Send notification that we are disconnecting to the server.
+            dataOutputStream.writeInt(DataActionMapping.CLIENT_WANTS_TO_DISCONNECT.ordinal());
+            dataOutputStream.flush();
+
+            // Close the TCP socket.
+            tcpSocket.close();
+
+            // Close input and output streams.
+            dataOutputStream.close();
+            objectInputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Close UDP socket.
         udpSocket.close();
     }
 

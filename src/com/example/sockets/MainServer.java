@@ -7,6 +7,7 @@ import com.example.sockets.Shared.WorldPosition;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -51,9 +52,25 @@ public class MainServer extends Thread {
             }
         });
 
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if(frame.isActive()) {
+                    if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                        spawnClient();
+                    }
+                }
+                return false;
+            }
+        });
+
         while(isRunning) {
             frame.repaint();
         }
+    }
+
+    public void spawnClient() {
+        new MainClient("127.0.0.1", tcpPort, udpPort);
     }
 
     public int getTcpPort() {

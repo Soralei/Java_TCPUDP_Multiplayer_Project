@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 
 public class ServerUDPReceiver extends Thread {
     private final ServerManager serverManager;
@@ -31,9 +32,11 @@ public class ServerUDPReceiver extends Thread {
                 }
             }
 
-            int dataAction = packetBuffer[0];
-            int posX = packetBuffer[1];
-            int posY = packetBuffer[2];
+            ByteBuffer packetBytes = ByteBuffer.wrap(packetBuffer);
+
+            int dataAction = packetBytes.getInt();
+            int posX = packetBytes.getInt();
+            int posY = packetBytes.getInt();
             if(dataAction == DataActionMapping.ENTITY_POSITION_CHANGE.ordinal()) {
                 serverManager.getServerClientData().forEach((k, v) -> {
                     if(v.getTcpSocket().getInetAddress().equals(packet.getAddress()) && packet.getPort() == v.getUdpPort()) {

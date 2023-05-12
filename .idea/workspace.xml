@@ -4,20 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Optimized imports">
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/MainClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/MainServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerUDPReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/ByteTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/com/example/sockets/MainTest.java" afterDir="false" />
+    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="stuff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientTCPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientTCPReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientUDPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/ClientUDPReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Client/LocalData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Client/LocalData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/MainClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/MainClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/MainServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/MainServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientTCPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerClientTCPReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerUDPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Server/ServerUDPReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/example/sockets/Shared/DataActionMapping.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/Shared/DataActionMapping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/ByteTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/com/example/sockets/MainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/com/example/sockets/MainTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,22 +96,9 @@
       <recent name="com.example.sockets" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ByteTest">
+  <component name="RunManager" selected="JUnit.UDPTest">
     <configuration name="MainClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.sockets.MainClient" />
-      <module name="working_with_sockets" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.sockets.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MainServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.sockets.MainServer" />
       <module name="working_with_sockets" />
       <extension name="coverage">
         <pattern>
@@ -162,13 +150,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UDPTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="working_with_sockets" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.sockets.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.sockets" />
+      <option name="MAIN_CLASS_NAME" value="com.example.sockets.UDPTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ByteTest" />
+        <item itemvalue="JUnit.UDPTest" />
         <item itemvalue="JUnit.MainTest" />
+        <item itemvalue="JUnit.ByteTest" />
         <item itemvalue="JUnit.MainTest.test" />
         <item itemvalue="Application.MainClient" />
-        <item itemvalue="Application.MainServer" />
       </list>
     </recent_temporary>
   </component>
@@ -190,7 +193,7 @@
       <workItem from="1683741468075" duration="9205000" />
       <workItem from="1683795359694" duration="16588000" />
       <workItem from="1683830426157" duration="8108000" />
-      <workItem from="1683891853100" duration="11439000" />
+      <workItem from="1683891853100" duration="22058000" />
     </task>
     <task id="LOCAL-00001" summary="Networking basics, functional">
       <created>1683723620009</created>
@@ -227,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683838392893</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="stuff">
+      <created>1683913693363</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1683913693363</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,6 +271,7 @@
     <MESSAGE value="Square 1" />
     <MESSAGE value="UDP connection added + some minor changes" />
     <MESSAGE value="Optimized imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="Optimized imports" />
+    <MESSAGE value="stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="stuff" />
   </component>
 </project>

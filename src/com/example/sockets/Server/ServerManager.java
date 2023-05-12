@@ -5,6 +5,8 @@ import com.example.sockets.Shared.WorldPosition;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,24 @@ public class ServerManager {
         udpSocket.close();
     }
 
+    // Remove the client and its corresponding network entity upon disconnect
+    // and notify all other clients via TCP
+    public void handleServerClientDisconnect(ServerClientData serverClientData) {
+        int clientPlayerId = serverClientData.getServerPlayer().getUniqueEntityId();
+        getNetworkedEntities().remove(clientPlayerId);
+        getServerClientData().remove(serverClientData.getClientId());
+        getServerClientData().forEach((k, v) -> {
+            ObjectOutputStream objectOutputStream = v.getObjectOutputStream();
+            try {
+                objectOutputStream.writeInt(DataActionMapping.ENTITY_REMOVED.ordinal());
+                objectOutputStream.writeInt(clientPlayerId);
+                objectOutputStream.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     // Notifies a client of that an entity has been registered on the server.
     private void sendClientEntity(NetworkedEntity networkedEntity, ServerClientData serverClientData) {
         ObjectOutputStream output = serverClientData.getObjectOutputStream();
@@ -66,40 +86,50 @@ public class ServerManager {
 
     // Broadcasts the entity's changed position to all connected clients via UDP
     public void networkEntityPositionChange(NetworkedEntity networkedEntity, WorldPosition worldPosition) {
-        try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); DataOutputStream dataInputStream = new DataOutputStream(byteArrayOutputStream)) {
-            getServerClientData().forEach((k, v) -> {
-                v.getTcpSocket().getInetAddress();
-                try {
-                    dataInputStream.writeInt(DataActionMapping.ENTITY_POSITION_CHANGE.ordinal());
-                    dataInputStream.writeInt(networkedEntity.getUniqueEntityId());
-                    dataInputStream.writeInt(worldPosition.x());
-                    dataInputStream.writeInt(worldPosition.y());
-                    dataInputStream.flush();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                byte[] bytesToSend = byteArrayOutputStream.toByteArray();
-                DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, v.getTcpSocket().getInetAddress(), v.getUdpPort());
-                try { udpSocket.send(packet); } catch (IOException e) { throw new RuntimeException(e); }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        getServerClientData().forEach((k, v) -> {
+            byte[] packetBytes = ByteBuffer.allocate(16)
+                    .putInt(DataActionMapping.ENTITY_POSITION_CHANGE.ordinal())
+                    .putInt(networkedEntity.getUniqueEntityId())
+                    .putInt(worldPosition.x())
+                    .putInt(worldPosition.y())
+                    .array();
+
+            DatagramPacket packet = new DatagramPacket(packetBytes, packetBytes.length, v.getTcpSocket().getInetAddress(), v.getUdpPort());
+            try {
+                udpSocket.send(packet);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    // Handles new clients and syncs them with the server
+    // Handles new clients and syncs them with the server.
     public void handleClientConnects(Socket clientSocket) {
-        // Create the client on the server
-        ServerClientData newClient = new ServerClientData(clientSocket);
+        // Create the client on the server.
+        ServerClientData newClient = new ServerClientData(this, clientSocket);
 
         // Add the client to the server
         serverClientData.put(newClient.getClientId(), newClient);
 
-        // Update the client with current entities
+        // Update the client with current entities.
         networkedEntities.forEach((k, v) -> networkEntityRegister(v, newClient));
 
-        // Add a player entity to represent the client
-        new ServerPlayer(this, "Player ID#" + NetworkedEntity.getNextUniqueId() + 1, new WorldPosition((int)(Math.random() * (50 + 100)), (int)(Math.random() * (50 + 100))));
+        WorldPosition worldPosition = new WorldPosition((int)(Math.random() * (50 + 100)), (int)(Math.random() * (50 + 100)));
+        // Add a player entity to represent the client.
+        ServerPlayer serverPlayer = new ServerPlayer(this, "Player ID#" + NetworkedEntity.getNextUniqueId() + 1, worldPosition);
+
+        // Associates the player entity with the server client.
+        newClient.setServerPlayer(serverPlayer);
+
+        // Let the player know what entity represents them by sending them their created networked entity's id.
+        ObjectOutputStream output = newClient.getObjectOutputStream();
+        try {
+            output.writeInt(DataActionMapping.NOTIFY_CLIENT_LOCAL_PLAYER_ID.ordinal());
+            output.writeInt(serverPlayer.getUniqueEntityId());
+            output.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ServerSocket getTcpSocket() {

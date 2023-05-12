@@ -41,6 +41,11 @@ public class ClientTCPReceiver extends Thread {
                         int uniqueId = input.readInt();
                         clientManager.getLocalData().removeClientEntity(uniqueId);
                     }
+
+                    if(dataAction == DataActionMapping.NOTIFY_CLIENT_LOCAL_PLAYER_ID.ordinal()) {
+                        int uniqueId = input.readInt();
+                        clientManager.getLocalData().setClientPlayerId(uniqueId);
+                    }
                 }
             } catch (SocketException e) {
                 if(!e.getMessage().equals("Socket closed")) {

@@ -7,11 +7,14 @@ import java.net.Socket;
 public class ServerClientData {
     private static int nextClientId = 0;
     private final int clientId;
+    private final ServerManager serverManager;
     private final Socket tcpSocket;
     private final ObjectOutputStream objectOutputStream;
     private int udpPort;
+    private ServerPlayer serverPlayer;
 
-    public ServerClientData(Socket tcpSocket) {
+    public ServerClientData(ServerManager serverManager, Socket tcpSocket) {
+        this.serverManager = serverManager;
         this.clientId = nextClientId++;
         this.tcpSocket = tcpSocket;
         this.udpPort = -1;
@@ -38,5 +41,17 @@ public class ServerClientData {
 
     public int getUdpPort() {
         return udpPort;
+    }
+
+    public ServerPlayer getServerPlayer() {
+        return serverPlayer;
+    }
+
+    public void setServerPlayer(ServerPlayer serverPlayer) {
+        this.serverPlayer = serverPlayer;
+    }
+
+    public ServerManager getServerManager() {
+        return serverManager;
     }
 }

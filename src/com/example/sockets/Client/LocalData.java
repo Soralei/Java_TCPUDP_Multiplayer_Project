@@ -7,9 +7,19 @@ import java.util.Map;
 
 public class LocalData {
     private final Map<Integer, ClientEntity> clientEntities;
+    private int clientPlayerId;
 
     public LocalData() {
         this.clientEntities = new HashMap<>();
+        this.clientPlayerId = -1;
+    }
+
+    public int getClientPlayerId() {
+        return clientPlayerId;
+    }
+
+    public void setClientPlayerId(int clientPlayerId) {
+        this.clientPlayerId = clientPlayerId;
     }
 
     public void addClientEntity(int id, WorldPosition worldPosition) {
@@ -17,11 +27,13 @@ public class LocalData {
     }
 
     public void updateClientEntityPosition(int id, WorldPosition worldPosition) {
-        clientEntities.get(id).setWorldPosition(worldPosition);
+        if(clientEntities.get(id) != null) {
+            clientEntities.get(id).setWorldPosition(worldPosition);
+        }
     }
 
     public void removeClientEntity(int id) {
-
+        clientEntities.remove(id);
     }
 
     public Map<Integer, ClientEntity> getClientEntities() {

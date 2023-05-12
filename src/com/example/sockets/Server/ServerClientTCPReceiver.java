@@ -19,8 +19,13 @@ public class ServerClientTCPReceiver extends Thread {
             while(serverClientData.getTcpSocket().isConnected()) {
                 if(dataInputStream.available() > 0) {
                     int dataAction = dataInputStream.readInt();
+
                     if(dataAction == DataActionMapping.UDP_REGISTER_PORT.ordinal()) {
                         serverClientData.setUdpPort(dataInputStream.readInt());
+                    }
+
+                    if(dataAction == DataActionMapping.CLIENT_WANTS_TO_DISCONNECT.ordinal()) {
+                        serverClientData.getServerManager().handleServerClientDisconnect(serverClientData);
                     }
                 }
             }

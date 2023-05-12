@@ -1,5 +1,6 @@
 package com.example.sockets;
 
+import com.example.sockets.Client.ClientEntity;
 import com.example.sockets.Client.ClientManager;
 import com.example.sockets.Shared.DataActionMapping;
 import com.example.sockets.Shared.WorldPosition;
@@ -12,13 +13,11 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 public class MainClient extends Thread {
-
-    private String remoteIpAddress;
-    private int tcpRemotePort;
-    private int udpRemotePort;
+    private final ClientManager clientManager;
+    private int localId;
     private WorldPosition localPosition;
     private boolean isMovingUp;
     private boolean isMovingRight;
@@ -27,10 +26,9 @@ public class MainClient extends Thread {
     private boolean isRunning;
 
     public MainClient(String remoteIpAddress, int tcpRemotePort, int udpRemotePort) {
-        this.remoteIpAddress = remoteIpAddress;
-        this.tcpRemotePort = tcpRemotePort;
-        this.udpRemotePort = udpRemotePort;
-        this.localPosition = new WorldPosition(50, 50);
+        this.clientManager = new ClientManager(remoteIpAddress, tcpRemotePort, udpRemotePort);
+        this.localId = -1;
+        this.localPosition = new WorldPosition(0, 0);
         this.isMovingUp = false;
         this.isMovingRight = false;
         this.isMovingDown = false;
@@ -43,11 +41,9 @@ public class MainClient extends Thread {
     public void run() {
         super.run();
 
-        ClientManager clientManager = new ClientManager(remoteIpAddress, tcpRemotePort, udpRemotePort);
-
         JFrame frame = new JFrame("MAIN CLIENT");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(200, 200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
@@ -67,16 +63,18 @@ public class MainClient extends Thread {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
-                if(e.getID() == KeyEvent.KEY_PRESSED) {
-                    if(e.getKeyCode() == KeyEvent.VK_W) { isMovingUp = true; }
-                    if(e.getKeyCode() == KeyEvent.VK_D) { isMovingRight = true; }
-                    if(e.getKeyCode() == KeyEvent.VK_S) { isMovingDown = true; }
-                    if(e.getKeyCode() == KeyEvent.VK_A) { isMovingLeft = true; }
-                } else if (e.getID() == KeyEvent.KEY_RELEASED) {
-                    if(e.getKeyCode() == KeyEvent.VK_W) { isMovingUp = false; }
-                    if(e.getKeyCode() == KeyEvent.VK_D) { isMovingRight = false; }
-                    if(e.getKeyCode() == KeyEvent.VK_S) { isMovingDown = false; }
-                    if(e.getKeyCode() == KeyEvent.VK_A) { isMovingLeft = false; }
+                if(frame.isActive()) {
+                    if(e.getID() == KeyEvent.KEY_PRESSED) {
+                        if(e.getKeyCode() == KeyEvent.VK_W) { isMovingUp = true; }
+                        if(e.getKeyCode() == KeyEvent.VK_D) { isMovingRight = true; }
+                        if(e.getKeyCode() == KeyEvent.VK_S) { isMovingDown = true; }
+                        if(e.getKeyCode() == KeyEvent.VK_A) { isMovingLeft = true; }
+                    } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                        if(e.getKeyCode() == KeyEvent.VK_W) { isMovingUp = false; }
+                        if(e.getKeyCode() == KeyEvent.VK_D) { isMovingRight = false; }
+                        if(e.getKeyCode() == KeyEvent.VK_S) { isMovingDown = false; }
+                        if(e.getKeyCode() == KeyEvent.VK_A) { isMovingLeft = false; }
+                    }
                 }
                 return false;
             }
@@ -93,26 +91,34 @@ public class MainClient extends Thread {
         while(isRunning) {
             try { Thread.sleep(30); } catch (InterruptedException e) { throw new RuntimeException(e); }
 
+            if(localId == -1 && clientManager.getLocalData().getClientPlayerId() != -1) {
+                localId = clientManager.getLocalData().getClientPlayerId();
+                ClientEntity localEntity = clientManager.getLocalData().getClientEntities().get(localId);
+                localPosition = new WorldPosition(localEntity.getWorldPosition().x(), localEntity.getWorldPosition().y());
+            }
+
             if(isMovingUp || isMovingRight || isMovingDown || isMovingLeft) {
                 if(isMovingUp) { localPosition = new WorldPosition(localPosition.x(), localPosition.y() - 5); }
                 if(isMovingRight) { localPosition = new WorldPosition(localPosition.x() + 5, localPosition.y()); }
                 if(isMovingDown) { localPosition = new WorldPosition(localPosition.x(), localPosition.y() + 5); }
                 if(isMovingLeft) { localPosition = new WorldPosition(localPosition.x() - 5, localPosition.y()); }
 
-                byte[] bytes = new byte[4];
-                bytes[0] = (byte)DataActionMapping.ENTITY_POSITION_CHANGE.ordinal();
-                bytes[1] = (byte)localPosition.x();
-                bytes[2] = (byte)localPosition.y();
+                byte[] packetBytes = ByteBuffer.allocate(16)
+                        .putInt(DataActionMapping.ENTITY_POSITION_CHANGE.ordinal())
+                        .putInt(localPosition.x())
+                        .putInt(localPosition.y())
+                        .array();
                 try {
-                    DatagramPacket packet = new DatagramPacket(bytes, bytes.length, InetAddress.getByName(clientManager.getRemoteIpAddress()), clientManager.getUdpRemotePort());
+                    DatagramPacket packet = new DatagramPacket(packetBytes, packetBytes.length, InetAddress.getByName(clientManager.getRemoteIpAddress()), clientManager.getUdpRemotePort());
                     clientManager.getUdpSocket().send(packet);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
-
             frame.repaint();
         }
+
+        clientManager.shutdown();
     }
 
     public boolean isRunning() {
