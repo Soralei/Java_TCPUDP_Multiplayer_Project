@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Connect, disconnect, positional updates">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Renamed project">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/working_with_sockets.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Server&amp;Client TCP&amp;UDP.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server&amp;Client TCP&amp;UDP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Java TCPUDP Multiplayer Project.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +56,7 @@
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Dev/Java/working_with_sockets&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Dev/Java/Server&amp;Client TCP&amp;UDP&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -88,7 +89,7 @@
   <component name="RunManager" selected="JUnit.MainTest">
     <configuration name="MainClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.sockets.MainClient" />
-      <module name="Server&amp;Client TCP&amp;UDP" />
+      <module name="Java TCPUDP Multiplayer Project" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.sockets.*" />
@@ -100,7 +101,7 @@
       </method>
     </configuration>
     <configuration name="ByteTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Server&amp;Client TCP&amp;UDP" />
+      <module name="Java TCPUDP Multiplayer Project" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="ByteTest" />
       <option name="TEST_OBJECT" value="class" />
@@ -109,7 +110,7 @@
       </method>
     </configuration>
     <configuration name="MainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Server&amp;Client TCP&amp;UDP" />
+      <module name="Java TCPUDP Multiplayer Project" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.sockets.*" />
@@ -124,7 +125,7 @@
       </method>
     </configuration>
     <configuration name="MainTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Server&amp;Client TCP&amp;UDP" />
+      <module name="Java TCPUDP Multiplayer Project" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.sockets.*" />
@@ -140,7 +141,7 @@
       </method>
     </configuration>
     <configuration name="UDPTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Server&amp;Client TCP&amp;UDP" />
+      <module name="Java TCPUDP Multiplayer Project" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.sockets.*" />
@@ -184,6 +185,7 @@
       <workItem from="1683830426157" duration="8108000" />
       <workItem from="1683891853100" duration="22058000" />
       <workItem from="1683925333373" duration="151000" />
+      <workItem from="1683925514755" duration="274000" />
     </task>
     <task id="LOCAL-00001" summary="Networking basics, functional">
       <created>1683723620009</created>
@@ -227,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683913693363</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Renamed project">
+      <created>1683925582198</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1683925582198</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +271,7 @@
     <MESSAGE value="UDP connection added + some minor changes" />
     <MESSAGE value="Optimized imports" />
     <MESSAGE value="stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="stuff" />
+    <MESSAGE value="Renamed project" />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed project" />
   </component>
 </project>
