@@ -27,16 +27,13 @@ public class ServerGUI {
             }
         });
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if(getjFrame().isActive()) {
-                    if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE) {
-                        new MainClient(getMainServer().getTcpPort(), getMainServer().getUdpPort(), "127.0.0.1");
-                    }
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if(getjFrame().isActive()) {
+                if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    new MainClient(getMainServer().getTcpPort(), getMainServer().getUdpPort(), "127.0.0.1");
                 }
-                return false;
             }
+            return false;
         });
 
         jFrame.setVisible(true);

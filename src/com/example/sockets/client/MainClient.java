@@ -3,8 +3,6 @@ package com.example.sockets.client;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class MainClient {
     private final int remoteTcpPort;

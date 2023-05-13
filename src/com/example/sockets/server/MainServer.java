@@ -58,9 +58,7 @@ public class MainServer {
     }
 
     public void broadcastEntityPosition(NetworkEntity networkEntity) {
-        getServerClients().forEach((k, v) -> {
-            v.syncEntityPosition(networkEntity);
-        });
+        getServerClients().forEach((k, v) -> v.syncEntityPosition(networkEntity));
     }
 
     public void removeServerClientById(int serverClientId) {

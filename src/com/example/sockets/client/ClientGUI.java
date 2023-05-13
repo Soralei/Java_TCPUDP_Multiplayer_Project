@@ -39,25 +39,22 @@ public class ClientGUI {
             }
         });
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if(getjFrame().isActive()) {
-                    if(e.getID() == KeyEvent.KEY_PRESSED) {
-                        if(e.getKeyCode() == KeyEvent.VK_W) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingUp(true); }
-                        if(e.getKeyCode() == KeyEvent.VK_D) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingRight(true); }
-                        if(e.getKeyCode() == KeyEvent.VK_S) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingDown(true); }
-                        if(e.getKeyCode() == KeyEvent.VK_A) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingLeft(true); }
-                    }
-                    if(e.getID() == KeyEvent.KEY_RELEASED) {
-                        if(e.getKeyCode() == KeyEvent.VK_W) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingUp(false); }
-                        if(e.getKeyCode() == KeyEvent.VK_D) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingRight(false); }
-                        if(e.getKeyCode() == KeyEvent.VK_S) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingDown(false); }
-                        if(e.getKeyCode() == KeyEvent.VK_A) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingLeft(false); }
-                    }
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if(getjFrame().isActive()) {
+                if(e.getID() == KeyEvent.KEY_PRESSED) {
+                    if(e.getKeyCode() == KeyEvent.VK_W) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingUp(true); }
+                    if(e.getKeyCode() == KeyEvent.VK_D) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingRight(true); }
+                    if(e.getKeyCode() == KeyEvent.VK_S) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingDown(true); }
+                    if(e.getKeyCode() == KeyEvent.VK_A) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingLeft(true); }
                 }
-                return false;
+                if(e.getID() == KeyEvent.KEY_RELEASED) {
+                    if(e.getKeyCode() == KeyEvent.VK_W) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingUp(false); }
+                    if(e.getKeyCode() == KeyEvent.VK_D) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingRight(false); }
+                    if(e.getKeyCode() == KeyEvent.VK_S) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingDown(false); }
+                    if(e.getKeyCode() == KeyEvent.VK_A) { mainClient.getClientGameLogic().getClientGameLogicData().setMovingLeft(false); }
+                }
             }
+            return false;
         });
     }
 

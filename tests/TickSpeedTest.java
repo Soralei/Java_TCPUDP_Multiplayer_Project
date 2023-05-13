@@ -23,17 +23,14 @@ public class TickSpeedTest {
         });
         frame.setVisible(true);
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if(e.getID() == KeyEvent.KEY_PRESSED) {
-                    if(e.getKeyCode() == KeyEvent.VK_W) { y -= 5; }
-                    if(e.getKeyCode() == KeyEvent.VK_D) { x += 5; }
-                    if(e.getKeyCode() == KeyEvent.VK_S) { y += 5; }
-                    if(e.getKeyCode() == KeyEvent.VK_A) { x -= 5; }
-                }
-                return false;
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if(e.getID() == KeyEvent.KEY_PRESSED) {
+                if(e.getKeyCode() == KeyEvent.VK_W) { y -= 5; }
+                if(e.getKeyCode() == KeyEvent.VK_D) { x += 5; }
+                if(e.getKeyCode() == KeyEvent.VK_S) { y += 5; }
+                if(e.getKeyCode() == KeyEvent.VK_A) { x -= 5; }
             }
+            return false;
         });
 
 
