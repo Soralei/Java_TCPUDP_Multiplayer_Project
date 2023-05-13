@@ -4,20 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Square 1">
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogicData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPSender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPSender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/client/MainClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/shared/ActionMapping.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/shared/WorldPosition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/TickSpeedTest.java" afterDir="false" />
+    <list default="true" id="7916c245-e8a8-4ec0-a06d-167fa2042be0" name="Changes" comment="Client recreated">
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/MainServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/NetworkEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerClientInputManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerGameLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerTCPConnector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/example/sockets/server/ServerUDPReceiver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/com/example/sockets/MainTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogicData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientGameLogicData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientTCPSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/ClientUDPSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/client/MainClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/client/MainClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/example/sockets/shared/ActionMapping.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/example/sockets/shared/ActionMapping.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +104,7 @@
       <recent name="com.example.sockets" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TickSpeedTest">
+  <component name="RunManager" selected="JUnit.MainTest">
     <configuration name="ByteTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Java TCPUDP Multiplayer Project" />
       <option name="PACKAGE_NAME" value="" />
@@ -165,8 +171,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TickSpeedTest" />
         <item itemvalue="JUnit.MainTest" />
+        <item itemvalue="JUnit.TickSpeedTest" />
         <item itemvalue="JUnit.UDPTest" />
         <item itemvalue="JUnit.ByteTest" />
         <item itemvalue="JUnit.MainTest.test" />
@@ -196,7 +202,7 @@
       <workItem from="1683925514755" duration="274000" />
       <workItem from="1683925819329" duration="1734000" />
       <workItem from="1683975131336" duration="928000" />
-      <workItem from="1683976077863" duration="16597000" />
+      <workItem from="1683976077863" duration="29734000" />
     </task>
     <task id="LOCAL-00001" summary="Networking basics, functional">
       <created>1683723620009</created>
@@ -261,7 +267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683975430149</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Client recreated">
+      <created>1684007150531</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1684007150531</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -298,6 +311,7 @@
     <MESSAGE value="Renamed project" />
     <MESSAGE value="Renamed project again" />
     <MESSAGE value="Square 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Square 1" />
+    <MESSAGE value="Client recreated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Client recreated" />
   </component>
 </project>

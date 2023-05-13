@@ -24,14 +24,16 @@ public class ClientGameLogicData {
     }
 
     public void handleMovement() {
-        if(isMovingUp()) { localPosition.setY(localPosition.getY() - 5); }
-        if(isMovingRight()) { localPosition.setX(localPosition.getX() + 5); }
-        if(isMovingDown()) { localPosition.setY(localPosition.getY() + 5); }
-        if(isMovingLeft()) { localPosition.setX(localPosition.getX() + 5); }
-        try {
-            this.clientGameLogic.getMainClient().getClientUDPSender().updateLocalPosition();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(isMovingUp() || isMovingRight() || isMovingDown() || isMovingLeft()) {
+            if(isMovingUp()) { localPosition.setY(localPosition.getY() - 5); }
+            if(isMovingRight()) { localPosition.setX(localPosition.getX() + 5); }
+            if(isMovingDown()) { localPosition.setY(localPosition.getY() + 5); }
+            if(isMovingLeft()) { localPosition.setX(localPosition.getX() - 5); }
+            try {
+                this.clientGameLogic.getMainClient().getClientUDPSender().updateLocalPosition();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

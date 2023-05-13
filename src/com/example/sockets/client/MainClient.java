@@ -3,6 +3,8 @@ package com.example.sockets.client;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class MainClient {
     private final int remoteTcpPort;
@@ -17,22 +19,26 @@ public class MainClient {
     private final ClientTCPSender tcpSender;
     private final ClientUDPSender clientUDPSender;
 
-    public MainClient(int remoteTcpPort, int remoteUdpPort, String remoteIpAddress) throws IOException {
-        this.remoteTcpPort = remoteTcpPort;
-        this.remoteUdpPort = remoteUdpPort;
-        this.remoteIpAddress = remoteIpAddress;
-        this.tcpSocket = new Socket(remoteIpAddress, remoteTcpPort);
-        this.udpSocket = new DatagramSocket();
-        this.running = true;
-        this.localUdpPort = this.udpSocket.getLocalPort();
-        new ClientTCPReceiver(this).start();
-        new ClientUDPReceiver(this).start();
-        this.tcpSender = new ClientTCPSender(this);
-        tcpSender.SendUDPPort();
-        this.clientUDPSender = new ClientUDPSender(this);
-        this.clientGameLogic = new ClientGameLogic(this, true);
-        this.clientGUI = new ClientGUI(this);
-
+    public MainClient(int remoteTcpPort, int remoteUdpPort, String remoteIpAddress) {
+        try {
+            this.clientGameLogic = new ClientGameLogic(this);
+            this.remoteTcpPort = remoteTcpPort;
+            this.remoteUdpPort = remoteUdpPort;
+            this.remoteIpAddress = remoteIpAddress;
+            this.tcpSocket = new Socket(remoteIpAddress, remoteTcpPort);
+            this.udpSocket = new DatagramSocket();
+            this.running = true;
+            this.localUdpPort = this.udpSocket.getLocalPort();
+            new ClientTCPReceiver(this).start();
+            new ClientUDPReceiver(this).start();
+            this.tcpSender = new ClientTCPSender(this);
+            tcpSender.SendUDPPort();
+            this.clientUDPSender = new ClientUDPSender(this);
+            this.clientGUI = new ClientGUI(this);
+            this.clientGameLogic.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ClientTCPSender getTcpSender() {

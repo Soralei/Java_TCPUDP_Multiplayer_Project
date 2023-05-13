@@ -20,16 +20,16 @@ public class ClientUDPReceiver extends Thread {
                 DatagramPacket receivedPacket = new DatagramPacket(packetBytes, packetBytes.length);
                 mainClient.getUdpSocket().receive(receivedPacket);
                 ByteBuffer byteBuffer = ByteBuffer.wrap(packetBytes);
-                int action = byteBuffer.getInt();
-                handleAction(byteBuffer, action);
+                handleAction(byteBuffer);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void handleAction(ByteBuffer byteBuffer, int action) {
-        if(action == ActionMapping.SERVER_SYNC_POSITIONS.ordinal()) {
+    public void handleAction(ByteBuffer byteBuffer) {
+        int action = byteBuffer.getInt();
+        if(action == ActionMapping.SERVER_UDP_SYNC_ENTITY_POSITION.ordinal()) {
             syncEntityPosition(byteBuffer);
         }
     }

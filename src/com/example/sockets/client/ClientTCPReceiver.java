@@ -3,9 +3,8 @@ package com.example.sockets.client;
 import com.example.sockets.shared.ActionMapping;
 import com.example.sockets.shared.WorldPosition;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 public class ClientTCPReceiver extends Thread {
     private final MainClient mainClient;
@@ -16,13 +15,11 @@ public class ClientTCPReceiver extends Thread {
 
     public void run() {
         try {
-            InputStream stream = mainClient.getTcpSocket().getInputStream();
+            DataInputStream dataInputStream = new DataInputStream(mainClient.getTcpSocket().getInputStream());
             while(mainClient.isRunning()) {
-                if(stream.available() > 0) {
-                    byte[] receivedBytes = stream.readAllBytes();
-                    ByteBuffer byteBuffer = ByteBuffer.wrap(receivedBytes);
-                    int action = byteBuffer.getInt();
-                    handleAction(byteBuffer, action);
+                if(dataInputStream.available() > 0) {
+                    int action = dataInputStream.readInt();
+                    handleAction(dataInputStream, action);
                 }
             }
         } catch (IOException e) {
@@ -30,38 +27,50 @@ public class ClientTCPReceiver extends Thread {
         }
     }
 
-    private void handleAction(ByteBuffer byteBuffer, int action) {
-        if(action == ActionMapping.SERVER_SYNC_ID.ordinal()) {
-            setLocalPlayerId(byteBuffer);
-        } else if (action == ActionMapping.SERVER_SYNC_ENTITY.ordinal()) {
-            updateOrAddEntity(byteBuffer);
-        } else if (action == ActionMapping.SERVER_REMOVE_ENTITY.ordinal()) {
-            entityRemoved(byteBuffer);
+    private void handleAction(DataInputStream dataInputStream, int action) {
+        if(action == ActionMapping.SERVER_TCP_SYNC_PLAYER_ID.ordinal()) {
+            setLocalPlayerId(dataInputStream);
+        } else if (action == ActionMapping.SERVER_TCP_SYNC_ENTITY.ordinal()) {
+            updateOrAddEntity(dataInputStream);
+        } else if (action == ActionMapping.SERVER_TCP_REMOVE_ENTITY.ordinal()) {
+            entityRemoved(dataInputStream);
         }
     }
 
-    private void setLocalPlayerId(ByteBuffer byteBuffer) {
-        int serverId = byteBuffer.getInt();
-        mainClient.getClientGameLogic().getClientGameLogicData().setPlayerId(serverId);
-    }
-
-    private void updateOrAddEntity(ByteBuffer byteBuffer) {
-        int entityId = byteBuffer.getInt();
-        int posX = byteBuffer.getInt();
-        int posY = byteBuffer.getInt();
-        ClientGameLogicData gameLogicData = getMainClient().getClientGameLogic().getClientGameLogicData();
-        ClientEntity clientEntity = gameLogicData.getEntityById(entityId);
-        if(clientEntity != null) {
-            clientEntity.getWorldPosition().setPosition(posX, posY);
-        } else {
-            gameLogicData.createNewEntity(entityId, new WorldPosition(posX, posY));
+    private void setLocalPlayerId(DataInputStream dataInputStream) {
+        try {
+            int serverId = dataInputStream.readInt();
+            mainClient.getClientGameLogic().getClientGameLogicData().setPlayerId(serverId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void entityRemoved(ByteBuffer byteBuffer) {
-        int entityId = byteBuffer.getInt();
-        ClientGameLogicData gameLogicData = getMainClient().getClientGameLogic().getClientGameLogicData();
-        gameLogicData.removeEntityById(entityId);
+    private void updateOrAddEntity(DataInputStream dataInputStream) {
+        try {
+            int entityId = dataInputStream.readInt();
+            int posX = dataInputStream.readInt();
+            int posY = dataInputStream.readInt();
+            ClientGameLogicData gameLogicData = getMainClient().getClientGameLogic().getClientGameLogicData();
+            ClientEntity clientEntity = gameLogicData.getEntityById(entityId);
+            if(clientEntity != null) {
+                clientEntity.getWorldPosition().setPosition(posX, posY);
+            } else {
+                gameLogicData.createNewEntity(entityId, new WorldPosition(posX, posY));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void entityRemoved(DataInputStream dataInputStream) {
+        try {
+            int entityId = dataInputStream.readInt();
+            ClientGameLogicData gameLogicData = getMainClient().getClientGameLogic().getClientGameLogicData();
+            gameLogicData.removeEntityById(entityId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public MainClient getMainClient() {

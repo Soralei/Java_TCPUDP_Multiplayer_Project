@@ -11,7 +11,7 @@ public record ClientUDPSender(MainClient mainClient) {
     public void updateLocalPosition() throws IOException {
         ClientGameLogicData gameLogicData = mainClient.getClientGameLogic().getClientGameLogicData();
         byte[] data = ByteBuffer.allocate(16)
-                .putInt(ActionMapping.CLIENT_SEND_LOCAL_POSITION.ordinal())
+                .putInt(ActionMapping.CLIENT_UDP_SEND_LOCAL_POSITION.ordinal())
                 .putInt(gameLogicData.getPlayerId())
                 .putInt(gameLogicData.getLocalPosition().getX())
                 .putInt(gameLogicData.getLocalPosition().getY())
